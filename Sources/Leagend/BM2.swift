@@ -34,3 +34,27 @@ extension BM2.Advertisement {
         self.name = name
     }
 }
+
+public extension BM2 {
+    
+    /// Decrypted battery characteristic
+    struct BatteryCharacteristic: Equatable, Hashable, Sendable {
+        
+        public static var uuid: BluetoothUUID { .leagendBatteryVoltageCharacteristic }
+        
+        public let voltage: UInt32
+        
+        public let power: UInt16
+        
+        init?(data: Data) {
+            guard data.count <= 16,
+                  data.first == 0xf5 else {
+                return nil
+            }
+            let voltage = UInt32(bigEndian: UInt32(bytes: (data[2], data[3], data[4], data[5])))
+            let power = UInt16(bigEndian: UInt16(bytes: (data[6], data[7])))
+            self.voltage = voltage
+            self.power = power
+        }
+    }
+}
