@@ -40,5 +40,9 @@ final class LeagendTests: XCTestCase {
         let decrypted = Data([0xf5, 0x4f, 0x51, 0x4c, 0x09, 0xcf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
         
         XCTAssertEqual(try! BM2.BatteryCharacteristic.decryptData(encrypted), decrypted)
+        XCTAssertEqual(try! BM2.BatteryCharacteristic.cryptoSwiftDecrypt(encrypted), decrypted)
+        #if canImport(CommonCrypto)
+        XCTAssertEqual(try! BM2.BatteryCharacteristic.commonCryptoDecrypt(encrypted), decrypted)
+        #endif
     }
 }

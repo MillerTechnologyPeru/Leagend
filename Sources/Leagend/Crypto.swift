@@ -9,7 +9,7 @@ import Foundation
 
 #if canImport(CryptoKit)
 import CryptoKit
-#else
+#elseif canImport(Crypto)
 import Crypto
 #endif
 #if canImport(CommonCrypto)
@@ -50,7 +50,7 @@ internal extension BM2.BatteryCharacteristic {
     
     /// Decrypt the provided data.
     static func decryptData(_ data: Data) throws -> Data {
-        #if canImport(CommonCrypto)
+        #if canImport(CommonCrypto) && os(iOS)
         // TODO: Common Crypto decryption
         return try cryptoSwiftDecrypt(data)
         #elseif canImport(CryptoSwift)
@@ -75,4 +75,45 @@ internal extension BM2.BatteryCharacteristic {
         return Data(decrypted)
     }
 }
+#endif
+
+#if canImport(CommonCrypto)
+import CommonCrypto
+
+func commonCryptoAES(_ operation: CCOperation, data: Data, key: Data, initializationVector: Data? = nil) throws -> Data {
+    
+    // padding for key
+    var key = key
+    if key.count < kCCKeySizeAES128 {
+        let remainder = kCCKeySizeAES128 - key.count
+        key.append(contentsOf: [UInt8](repeating: 0x00, count: remainder))
+    }
+    assert(key.count == kCCKeySizeAES128)
+    // padding for input
+    var data = data
+    if data.count < 16 {
+        let remainder = 16 - data.count
+        data.append(contentsOf: [UInt8](repeating: 0x00, count: remainder))
+    }
+    assert(data.count == 16)
+    let cryptor = try CommonCrypto(
+        operation: operation,
+        algorithm: CCAlgorithm(kCCAlgorithmAES),
+        options: 0,
+        key: key,
+        iv: initializationVector
+    )
+    var output = Data()
+    try cryptor.update(with: data, output: &output)
+    try cryptor.finalize(output: &output)
+    return output
+}
+
+internal extension BM2.BatteryCharacteristic {
+    
+    static func commonCryptoDecrypt(_ encryptedData: Data) throws -> Data {
+        return try commonCryptoAES(.decrypt, data: encryptedData, key: BM2.leagendKeyData)
+    }
+}
+
 #endif
