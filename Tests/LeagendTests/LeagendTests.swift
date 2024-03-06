@@ -29,7 +29,7 @@ final class LeagendTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(characteristic.voltage, 1280)
+        XCTAssertEqual(characteristic.voltage, 1269)
         XCTAssertEqual(characteristic.power, 76)
     }
     

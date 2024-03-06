@@ -42,17 +42,18 @@ public extension BM2 {
         
         public static var uuid: BluetoothUUID { .leagendBatteryVoltageCharacteristic }
         
-        public let voltage: UInt32
+        public let voltage: UInt16
         
-        public let power: UInt16
+        public let power: UInt8
         
         init?(data: Data) {
-            guard data.count <= 16,
+            guard data.count >= 8,
                   data.first == 0xf5 else {
                 return nil
             }
-            let voltage = UInt32(bigEndian: UInt32(bytes: (data[2], data[3], data[4], data[5])))
-            let power = UInt16(bigEndian: UInt16(bytes: (data[6], data[7])))
+            
+            let voltage = UInt16(bigEndian: UInt16(bytes: (data[1], data[2]))) >> 4
+            let power = data[3]
             self.voltage = voltage
             self.power = power
         }
