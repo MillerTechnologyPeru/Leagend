@@ -23,6 +23,10 @@ let package = Package(
         .package(
             url: "https://github.com/PureSwift/GATT.git",
             branch: "master"
+        ),
+        .package(
+            url: "https://github.com/krzyzanowskim/CryptoSwift.git",
+            .upToNextMajor(from: "1.8.1")
         )
     ],
     targets: [
@@ -37,6 +41,10 @@ let package = Package(
                     name: "GATT",
                     package: "GATT"
                 ),
+                .product(
+                    name: "CryptoSwift",
+                    package: "CryptoSwift"
+                )
             ]
         ),
         .testTarget(
