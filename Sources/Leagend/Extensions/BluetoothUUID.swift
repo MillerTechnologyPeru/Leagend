@@ -10,7 +10,35 @@ import Bluetooth
 
 public extension BluetoothUUID {
     
-    static var leagendBatteryVoltageCharacteristic: BluetoothUUID {
-        BluetoothUUID(rawValue: "0000FFF4-0000-1000-8000-00805F9B34FB")!
+    static var leagendBM2Service: BluetoothUUID {
+        .bit16(0xFFF0)
+    }
+    
+    static var leagendBM2Characteristic1: BluetoothUUID {
+        .bit16(0xFFF1)
+    }
+    
+    static var leagendBM2Characteristic2: BluetoothUUID {
+        .bit16(0xFFF2)
+    }
+    
+    static var leagendBM2Characteristic3: BluetoothUUID {
+        .bit16(0xFFF3)
+    }
+    
+    static var leagendBM2BatteryVoltageCharacteristic: BluetoothUUID {
+        .bit16(0xFFF4) // "0000fff4-0000-1000-8000-00805f9b34fb"
+    }
+    
+    static var leagendBM2Characteristic5: BluetoothUUID {
+        .bit16(0xFFF5)
+    }
+    
+    static var leagendBM2OTAService: BluetoothUUID {
+        .bit16(0xFEE0)
+    }
+    
+    static var leagendBM2OTACharacteristic: BluetoothUUID {
+        .bit16(0xFEE1)
     }
 }
