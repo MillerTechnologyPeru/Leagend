@@ -22,7 +22,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/PureSwift/GATT.git",
-            branch: "master"
+            from: "3.2.0"
         ),
         .package(
             url: "https://github.com/krzyzanowskim/CryptoSwift.git",
