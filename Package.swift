@@ -49,7 +49,14 @@ let package = Package(
         ),
         .testTarget(
             name: "LeagendTests",
-            dependencies: ["Leagend"]
+            dependencies: [
+                "Leagend",
+                .product(
+                    name: "BluetoothGAP",
+                    package: "Bluetooth",
+                    condition: .when(platforms: [.macOS, .linux])
+                )
+            ]
         ),
     ]
 )
