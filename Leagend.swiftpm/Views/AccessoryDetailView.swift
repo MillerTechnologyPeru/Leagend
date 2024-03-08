@@ -33,6 +33,9 @@ struct LeagendAccessoryDetailView: View {
     @State
     private var information: Result<LeagendAccessoryInfo, Error>?
     
+    @State
+    private var identifier: String?
+    
     init(
         peripheral: NativePeripheral
     ) {
@@ -45,7 +48,8 @@ struct LeagendAccessoryDetailView: View {
                 StateView(
                     peripheral: peripheral,
                     advertisement: advertisement,
-                    information: information
+                    information: information,
+                    identifier: identifier
                 )
             } else {
                 ProgressView()
@@ -80,7 +84,7 @@ extension LeagendAccessoryDetailView {
             fetchAccessoryInfo()
         }
         // Bluetooth
-        //connect()
+        connect()
     }
     
     func fetchAccessoryInfo() {
@@ -111,7 +115,11 @@ extension LeagendAccessoryDetailView {
         }
         Task {
             do {
-                _ = try await store.connect(to: peripheral)
+                switch advertisement.type {
+                case .bm2:
+                    let address = try await store.readBM2Identifier(for: peripheral)
+                    self.identifier = address.description
+                }
             }
             catch {
                 store.log("Unable to connect to \(peripheral). \(error)")
@@ -120,9 +128,6 @@ extension LeagendAccessoryDetailView {
     }
     
     func disconnect() {
-        guard let advertisement else {
-            return
-        }
         Task {
             await store.disconnect(peripheral)
         }
@@ -142,6 +147,8 @@ extension LeagendAccessoryDetailView {
         let advertisement: LeagendAccessory.Advertisement
         
         let information: Result<LeagendAccessoryInfo, Error>?
+        
+        let identifier: String?
         
         var body: some View {
             ScrollView {
@@ -171,6 +178,10 @@ extension LeagendAccessoryDetailView {
                     }
                     .frame(height: 250)
                     .padding()
+                    
+                    if let identifier {
+                        Text(verbatim: identifier)
+                    }
                     
                     // Actions
                     switch advertisement.type {

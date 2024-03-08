@@ -84,6 +84,13 @@ public extension AccessoryManager {
         await central.disconnect(peripheral)
     }
     
+    func readBM2Identifier(
+        for peripheral: NativePeripheral
+    ) async throws -> BluetoothAddress {
+        let connection = try await connect(to: peripheral)
+        return try await connection.readLeagendBM2Identifier()
+    }
+    
     /// Read Voltage
     func readBM2Voltage(
         for peripheral: NativePeripheral
@@ -101,6 +108,29 @@ internal extension GATTConnection {
         }
         let notifications = try await central.notify(for: characteristic)
         return notifications//.compactMap { BM2.BatteryCharacteristic(data: $0) }
+    }
+    
+    func readBM2Identifier() async throws -> BluetoothAddress {
+        guard let characteristic = cache.characteristic(.systemId, service: .deviceInformation) else {
+            throw LeagendAppError.characteristicNotFound(.systemId)
+        }
+        let data = try await central.readValue(for: characteristic)
+        guard data.count == 8 else {
+            throw LeagendAppError.invalidCharacteristicValue(.systemId)
+        }
+        let address = BluetoothAddress(
+            bigEndian: BluetoothAddress(
+                bytes: (
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[5],
+                    data[6],
+                    data[7]
+                )
+            )
+        )
+        return address
     }
 }
 
