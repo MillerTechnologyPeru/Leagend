@@ -19,7 +19,7 @@ struct VoltageView: View {
     private var store: AccessoryManager
     
     @State
-    var entries = [Reading]()
+    var readings = [Reading]()
     
     @State
     var onDisappear: () -> () = { }
@@ -31,11 +31,11 @@ struct VoltageView: View {
     var body: some View {
         VStack(alignment: .leading) {
             List {
-                ForEach(entries) { item in
+                ForEach(readings.reversed()) { reading in
                     HStack {
-                        Text(item.date, style: .time)
-                        Text("\(item.voltage)v")
-                        Text("\(item.percentage)%")
+                        Text(verbatim: reading.date.formatted(date: .abbreviated, time: .complete))
+                        Text("\(reading.voltage)v")
+                        Text("\(reading.percentage)%")
                     }
                 }
             }
@@ -61,7 +61,7 @@ private extension VoltageView {
             Task {
                 do {
                     for try await notification in stream {
-                        guard let characteristic = BM2.BatteryCharacteristic(data: notification) else {
+                        guard let characteristic = try? BM2.BatteryCharacteristic.decrypt(notification) else {
                             continue
                         }
                         let reading = Reading(
@@ -69,7 +69,7 @@ private extension VoltageView {
                             voltage: characteristic.voltage.voltage,
                             percentage: UInt(characteristic.power.rawValue)
                         )
-                        self.entries.append(reading)
+                        self.readings.append(reading)
                     }
                 }
                 catch {
