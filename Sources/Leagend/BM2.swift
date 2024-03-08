@@ -51,7 +51,7 @@ public extension BM2 {
         
         public let voltage: BatteryVoltage
         
-        public let power: UInt8
+        public let power: BatteryPercentage
         
         init?(data: Data) {
             guard data.count >= 8,
@@ -62,7 +62,7 @@ public extension BM2 {
             let voltage = UInt16(bigEndian: UInt16(bytes: (data[1], data[2]))) >> 4
             let power = data[3]
             self.voltage = BM2.BatteryVoltage(rawValue: voltage)
-            self.power = power
+            self.power = BatteryPercentage(rawValue: power)
         }
     }
 }

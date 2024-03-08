@@ -33,7 +33,10 @@ final class LeagendTests: XCTestCase {
         }
         
         XCTAssertEqual(characteristic.voltage, 1269)
+        XCTAssertEqual(characteristic.voltage.voltage, 12.69)
+        XCTAssertEqual(characteristic.voltage.description, "12.69V")
         XCTAssertEqual(characteristic.power, 76)
+        XCTAssertEqual(characteristic.power.description, "76%")
     }
     
     func testBM2Decrypt() throws {
