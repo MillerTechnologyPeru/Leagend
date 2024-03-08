@@ -71,7 +71,7 @@ public extension BM2 {
 
 public extension BM2 {
     
-    struct BatteryVoltage: RawRepresentable, Equatable, Hashable, Codable {
+    struct BatteryVoltage: RawRepresentable, Equatable, Hashable, Codable, Sendable {
                 
         public let rawValue: UInt16
         
@@ -106,7 +106,7 @@ extension BM2.BatteryVoltage: CustomStringConvertible {
 
 public extension BM2 {
     
-    struct BatteryPercentage: RawRepresentable, Equatable, Hashable, Codable {
+    struct BatteryPercentage: RawRepresentable, Equatable, Hashable, Codable, Sendable {
                 
         public let rawValue: UInt8
         
