@@ -20,7 +20,7 @@ public struct BM2 {
     
     public struct Advertisement: Equatable, Hashable, Sendable {
         
-        static var service: BluetoothUUID { .leagendBM2Service }
+        public static var service: BluetoothUUID { .leagendBM2Service }
         
         public let name: BM2.Name
     }
@@ -53,7 +53,7 @@ public extension BM2 {
         
         public let power: BatteryPercentage
         
-        init?(data: Data) {
+        public init?(data: Data) {
             guard data.count >= 8,
                   data.first == 0xf5 else {
                 return nil
