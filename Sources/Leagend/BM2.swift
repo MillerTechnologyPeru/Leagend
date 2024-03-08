@@ -30,8 +30,7 @@ public extension BM2.Advertisement {
     
     init?<T: AdvertisementData>(_ advertisement: T) {
         guard let localName = advertisement.localName,
-              let name = BM2.Name(rawValue: localName),
-              advertisement.serviceUUIDs == [Self.service] else {
+              let name = BM2.Name(rawValue: localName) else {
             return nil
         }
         self.name = name
@@ -83,8 +82,8 @@ public extension BM2 {
 
 public extension BM2.BatteryVoltage {
     
-    var voltage: Double {
-        Double(rawValue) / 100
+    var voltage: Float {
+        Float(rawValue) / 100
     }
 }
 
