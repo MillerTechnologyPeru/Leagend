@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BM2</key>
+	<dict>
+		<key>symbol</key>
+		<string>minus.plus.batteryblock</string>
+		<key>image</key>
+		<string>https://www.leagend.com/upimg/d2016111516192960.png</string>
+		<key>manual</key>
+		<string>https://www.sunnysoft.cz/download/en-navod-plv-008.pdf</string>
+		<key>website</key>
+		<string>https://www.leagend.com/pro_show.php?id=159</string>
+	</dict>
+</dict>
+</plist>
